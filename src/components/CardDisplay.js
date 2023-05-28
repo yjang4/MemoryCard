@@ -9,6 +9,7 @@ function CardDisplay() {
     const displays = [];
     const difficulty = 1;
     const startingCards = 2;
+    const imageContainer = document.getElementById("image-container");
 
     function randomUniqueNum(range, outputCount) {
         let arr = []
@@ -27,20 +28,23 @@ function CardDisplay() {
         return result;
     }
     function checkIfCardInMemory(id) {
-        const imageContainer = document.getElementById("image-container");
         if(savedCards.includes(id)) {
             emptyDiv(imageContainer);
             imageContainer.textContent = "Game Over";
+            return true;
         }
         else {
             setScore(score + 1)
-    
+            return false;
         }
     }
     function emptyDiv(targetDiv) {
-        while (targetDiv.firstChild) {
-            targetDiv.removeChild(targetDiv.firstChild);
+        if(targetDiv != null) {
+            while (targetDiv.firstChild) {
+                targetDiv.removeChild(targetDiv.firstChild);
+            }
         }
+        
     }
     function checkLevelUp() {
         console.log(savedCards.length)
@@ -50,17 +54,19 @@ function CardDisplay() {
         }
     }
     function shuffle(id) {
-        checkIfCardInMemory(id);
-        setSavedCards(savedCards => ([...savedCards, id]));
-        var container = document.getElementById("image-container");
-        var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('pokemon-image'));
-          elementsArray.forEach(function(element){
-          container.removeChild(element);
-        })
-        shuffleArray(elementsArray);
-        elementsArray.forEach(function(element){
-        container.appendChild(element);
-      })
+        if(!checkIfCardInMemory(id)) {
+            setSavedCards(savedCards => ([...savedCards, id]));
+            var container = document.getElementById("image-container");
+            var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('pokemon-image'));
+            elementsArray.forEach(function(element){
+            container.removeChild(element);
+            })
+            shuffleArray(elementsArray);
+            elementsArray.forEach(function(element){
+            container.appendChild(element);
+            })
+        }
+        
     }
     function shuffleArray(array) {
         for (var i = array.length - 1; i > 0; i--) {
@@ -87,6 +93,7 @@ function CardDisplay() {
           const urlArray = [];
           const randArray = randomUniqueNum(pokeData.results.length, level * difficulty + startingCards)
           
+          emptyDiv(imageContainer)
           for (let i = 0; i < randArray.length; i ++) {
             const newUrl = pokeData.results[randArray[i]-1].url;
             const response2 = await fetch(newUrl, {mode: 'cors'});
@@ -97,10 +104,10 @@ function CardDisplay() {
         }
         getData()
         
-      }, []);
+      }, [level]);
     
     return (
-        <div id="image-container"> 
+        <div> 
         {checkLevelUp()}
             <div id="score-board">
                 <div id="level">
@@ -110,12 +117,14 @@ function CardDisplay() {
                     Score: {score}
                 </div>
             </div>
-            {images.map((image, index) => { 
-                return <div id={index} className ="pokemon-image">
-                    <img onClick={() => shuffle(index)}  src={image}></img>
-                    </div>;
-              })} 
-            {displays}
+            <div id="image-container">
+                {images.map((image, index) => {
+                    return <div id={index} className ="pokemon-image">
+                        <img onClick={() => shuffle(index)}  src={image}></img>
+                        </div>;
+                  })}
+            </div>
+
 
         </div>
       );
