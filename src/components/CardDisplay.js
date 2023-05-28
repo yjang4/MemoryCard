@@ -22,7 +22,7 @@ function CardDisplay() {
         return result;
     }
 
-    function shuffle() {
+    function shuffle(id) {
         var container = document.getElementById("image-container");
         var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('pokemon-image'));
           elementsArray.forEach(function(element){
@@ -76,9 +76,9 @@ function CardDisplay() {
     
     return (
         <div id="image-container"> 
-            {images.map((image) => { 
-                return <div className ="pokemon-image">
-                    <img onClick={shuffle}  src={image}></img>
+            {images.map((image, index) => { 
+                return <div id={index} className ="pokemon-image">
+                    <img onClick={() => shuffle(index)}  src={image}></img>
                     </div>;
               })} 
             {displays}
