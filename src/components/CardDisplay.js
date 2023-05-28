@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-function CardDisplay(props) {
-    const { cards } = props;
+function CardDisplay() {
     
+    const [images, setImg] = useState([]);
     const displays = [];
+    
     function randomUniqueNum(range, outputCount) {
 
         let arr = []
@@ -21,23 +22,47 @@ function CardDisplay(props) {
       
         return result;
     }
-    function displayPokemonCards(numOfCards) {
+    function imageClick() {
+        console.log("click");
+    }
+    /* function displayPokemonCards(numOfCards) {
         const rando = randomUniqueNum(cards.length, numOfCards);
 
         for (let i = 0; i < numOfCards; i++) {
             displays.push(<img src={cards[rando[i]-1]}></img>);
 
         }
-    }
-    displayPokemonCards(5);
-
+    } */
+    //displayPokemonCards(5);
+    useEffect(() => {
+        async function getData() {
+          const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000', {mode: 'cors'})
+          const pokeData = await response.json();
+          console.log(pokeData);
+          const urlArray = [];
+          const randArray = randomUniqueNum(pokeData.results.length, 5)
+          
+          console.log(randArray);
+          for (let i = 0; i < randArray.length; i ++) {
+            const newUrl = pokeData.results[randArray[i]-1].url;
+            console.log(newUrl);
+            const response2 = await fetch(newUrl, {mode: 'cors'});
+            const pokeData2 = await response2.json();
+            urlArray.push(pokeData2.sprites.front_default);
+          } 
+          console.log(urlArray);
+          setImg(images => ([...images, ...urlArray]));
+        }
+        getData()
+        
+      }, []);
     return (
         <div>
-            {/* {cards.map((card) => {
+            {images.map((image) => { 
                 return <div>
-                    <img src={card}></img>
+                    <img onClick={imageClick} className ="pokemon-image" src={image}></img>
                     </div>;
-              })} */}
+              })} 
             {displays}
 
         </div>
