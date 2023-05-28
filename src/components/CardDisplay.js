@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 function CardDisplay() {
     
     const [images, setImg] = useState([]);
+    const [savedCards, setSavedCards] = useState([]);
     const displays = [];
+
     function randomUniqueNum(range, outputCount) {
 
         let arr = []
@@ -21,8 +23,23 @@ function CardDisplay() {
       
         return result;
     }
-
+    function checkIfCardInMemory(id) {
+        const imageContainer = document.getElementById("image-container");
+        
+        if(savedCards.includes(id)) {
+            console.log("XFDS");
+            emptyDiv(imageContainer);
+        }
+    }
+    function emptyDiv(targetDiv) {
+        while (targetDiv.firstChild) {
+            targetDiv.removeChild(targetDiv.firstChild);
+        }
+    }
     function shuffle(id) {
+        console.log(id);
+        checkIfCardInMemory(id);
+        setSavedCards(savedCards => ([...savedCards, id]));
         var container = document.getElementById("image-container");
         var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('pokemon-image'));
           elementsArray.forEach(function(element){
@@ -55,19 +72,15 @@ function CardDisplay() {
         async function getData() {
           const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000', {mode: 'cors'})
           const pokeData = await response.json();
-          console.log(pokeData);
           const urlArray = [];
           const randArray = randomUniqueNum(pokeData.results.length, 12)
           
-          console.log(randArray);
           for (let i = 0; i < randArray.length; i ++) {
             const newUrl = pokeData.results[randArray[i]-1].url;
-            console.log(newUrl);
             const response2 = await fetch(newUrl, {mode: 'cors'});
             const pokeData2 = await response2.json();
             urlArray.push(pokeData2.sprites.front_default);
           } 
-          console.log(urlArray);
           setImg(images => ([...images, ...urlArray]));
         }
         getData()
