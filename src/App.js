@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import CardDisplay from "./components/CardDisplay";
+import './App.css';
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      
+      <div id="title">Pokemon Memory Card</div>
     { <CardDisplay/> }
 
 

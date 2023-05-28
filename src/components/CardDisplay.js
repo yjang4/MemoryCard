@@ -1,5 +1,6 @@
 import { findByDisplayValue } from "@testing-library/react";
 import React, { useState, useEffect } from "react";
+import './CardDisplay.css';
 
 function CardDisplay() {
     
@@ -60,7 +61,6 @@ function CardDisplay() {
         
     }
     function checkLevelUp() {
-        console.log(savedCards.length)
         if(savedCards.length >= level * difficulty + startingCards) {
             setSavedCards([]);
             setLevel(level + 1)
@@ -122,7 +122,6 @@ function CardDisplay() {
     return (
         <div> 
         {checkLevelUp()}
-        {console.log(images)}
             <div id="score-board">
                 <div id="level">
                     Level: {level}
@@ -134,7 +133,7 @@ function CardDisplay() {
             <div id="image-container">
                 {images.map((image, index) => {
                     return <div id={index} className ="pokemon-image">
-                        <img onClick={() => shuffle(index)}  src={image}></img>
+                        <img style={{animation:'fadeIn 0.5s'}} onClick={() => shuffle(index)}  src={image}></img>
                         </div>;
                   })}
             </div>
