@@ -4,10 +4,13 @@ function CardDisplay() {
     
     const [images, setImg] = useState([]);
     const [savedCards, setSavedCards] = useState([]);
+    const [level, setLevel] = useState(1);
+    const [score, setScore] = useState(0);
     const displays = [];
+    const difficulty = 1;
+    const startingCards = 2;
 
     function randomUniqueNum(range, outputCount) {
-
         let arr = []
         for (let i = 1; i <= range; i++) {
           arr.push(i)
@@ -25,10 +28,13 @@ function CardDisplay() {
     }
     function checkIfCardInMemory(id) {
         const imageContainer = document.getElementById("image-container");
-        
         if(savedCards.includes(id)) {
-            console.log("XFDS");
             emptyDiv(imageContainer);
+            imageContainer.textContent = "Game Over";
+        }
+        else {
+            setScore(score + 1)
+    
         }
     }
     function emptyDiv(targetDiv) {
@@ -36,8 +42,14 @@ function CardDisplay() {
             targetDiv.removeChild(targetDiv.firstChild);
         }
     }
+    function checkLevelUp() {
+        console.log(savedCards.length)
+        if(savedCards.length >= level * difficulty + startingCards) {
+            setSavedCards([]);
+            setLevel(level + 1)
+        }
+    }
     function shuffle(id) {
-        console.log(id);
         checkIfCardInMemory(id);
         setSavedCards(savedCards => ([...savedCards, id]));
         var container = document.getElementById("image-container");
@@ -73,7 +85,7 @@ function CardDisplay() {
           const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000', {mode: 'cors'})
           const pokeData = await response.json();
           const urlArray = [];
-          const randArray = randomUniqueNum(pokeData.results.length, 12)
+          const randArray = randomUniqueNum(pokeData.results.length, level * difficulty + startingCards)
           
           for (let i = 0; i < randArray.length; i ++) {
             const newUrl = pokeData.results[randArray[i]-1].url;
@@ -89,6 +101,15 @@ function CardDisplay() {
     
     return (
         <div id="image-container"> 
+        {checkLevelUp()}
+            <div id="score-board">
+                <div id="level">
+                    Level: {level}
+                </div>
+                <div id="score">
+                    Score: {score}
+                </div>
+            </div>
             {images.map((image, index) => { 
                 return <div id={index} className ="pokemon-image">
                     <img onClick={() => shuffle(index)}  src={image}></img>
