@@ -4,7 +4,6 @@ function CardDisplay() {
     
     const [images, setImg] = useState([]);
     const displays = [];
-    
     function randomUniqueNum(range, outputCount) {
 
         let arr = []
@@ -13,7 +12,7 @@ function CardDisplay() {
         }
       
         let result = [];
-      
+        
         for (let i = 1; i <= outputCount; i++) {
           const random = Math.floor(Math.random() * (range - i));
           result.push(arr[random]);
@@ -22,8 +21,26 @@ function CardDisplay() {
       
         return result;
     }
-    function imageClick() {
-        console.log("click");
+
+    function shuffle() {
+        var container = document.getElementById("image-container");
+        var elementsArray = Array.prototype.slice.call(container.getElementsByClassName('pokemon-image'));
+          elementsArray.forEach(function(element){
+          container.removeChild(element);
+        })
+        shuffleArray(elementsArray);
+        elementsArray.forEach(function(element){
+        container.appendChild(element);
+      })
+    }
+    function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
     }
     /* function displayPokemonCards(numOfCards) {
         const rando = randomUniqueNum(cards.length, numOfCards);
@@ -40,7 +57,7 @@ function CardDisplay() {
           const pokeData = await response.json();
           console.log(pokeData);
           const urlArray = [];
-          const randArray = randomUniqueNum(pokeData.results.length, 5)
+          const randArray = randomUniqueNum(pokeData.results.length, 12)
           
           console.log(randArray);
           for (let i = 0; i < randArray.length; i ++) {
@@ -56,11 +73,12 @@ function CardDisplay() {
         getData()
         
       }, []);
+    
     return (
-        <div>
+        <div id="image-container"> 
             {images.map((image) => { 
-                return <div>
-                    <img onClick={imageClick} className ="pokemon-image" src={image}></img>
+                return <div className ="pokemon-image">
+                    <img onClick={shuffle}  src={image}></img>
                     </div>;
               })} 
             {displays}
