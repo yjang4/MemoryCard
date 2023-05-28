@@ -9,15 +9,17 @@ function App() {
     async function getData() {
       const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100', {mode: 'cors'})
       const pokeData = await response.json();
+      console.log(pokeData);
+      const urlArray = [];
       for (let i = 0; i < pokeData.results.length; i ++) {
         const newUrl = pokeData.results[i].url;
         const response2 = await fetch(newUrl, {mode: 'cors'});
         const pokeData2 = await response2.json();
-        const spriteUrl = pokeData2.sprites.front_shiny;
-        setImg(img => ([...img, spriteUrl]));
+        urlArray.push(pokeData2.sprites.front_shiny);
+        
         
       } 
-    
+      setImg(img => ([...img, ...urlArray]));
     }
     getData()
     
@@ -25,7 +27,8 @@ function App() {
 
   return (
     <div className="App">
-      <CardDisplay cards={img}/>
+       { <CardDisplay cards={img}/> } 
+
 
     </div>
   );
