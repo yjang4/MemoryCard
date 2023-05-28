@@ -12,6 +12,7 @@ function CardDisplay(props) {
                     </div>;
               })} */}
               <img src={cards[random]}></img>
+              {console.log("fdsa")}
         </div>
       );
 }
