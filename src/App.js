@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
 import CardDisplay from "./components/CardDisplay";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <div className="App">
+      
     { <CardDisplay/> }
 
 

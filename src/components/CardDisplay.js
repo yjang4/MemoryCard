@@ -29,23 +29,21 @@ function CardDisplay() {
       
         return result;
     }
-    function restartGame() {
+  /*   function restartGame() {
         //setImg([])
-        //setScore(0)
-        //setLevel(1)
+        
         //setRe(1);
         //setSavedCards([]);
-        
-    }
+    } */
     function checkIfCardInMemory(id) {
         if(savedCards.includes(id)) {
             //emptyDiv(imageContainer);
             imageContainer.textContent = "Game Over";
 
-            const tryAgainBtn = document.createElement("button");
+            /* const tryAgainBtn = document.createElement("button");
             tryAgainBtn.textContent = "Try again";
             imageContainer.appendChild(tryAgainBtn)
-            tryAgainBtn.addEventListener("click", restartGame);
+            tryAgainBtn.addEventListener("click", restartGame); */
             return true;
         }
         else {
@@ -108,7 +106,6 @@ function CardDisplay() {
           const pokeData = await response.json();
           const urlArray = [];
           const randArray = randomUniqueNum(pokeData.results.length, level * difficulty + startingCards)
-          if(re == 1) setRe(0)
           emptyDiv(imageContainer)
           for (let i = 0; i < randArray.length; i ++) {
             const newUrl = pokeData.results[randArray[i]-1].url;
