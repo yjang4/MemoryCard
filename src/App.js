@@ -4,12 +4,13 @@ import CardDisplay from "./components/CardDisplay";
 function App() {
 
   useEffect(() => {
-    async function getData() {
+    document.title = 'PokeMemory';
+    /* async function getData() {
       const response = await fetch('https://pokeapi.co/api/v2/pokemon/10129/', {mode: 'cors'})
       const pokeData = await response.json();
       console.log(pokeData);
     }
-    getData()
+    getData() */
     
   }, []); 
 

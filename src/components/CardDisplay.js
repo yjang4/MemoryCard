@@ -1,3 +1,4 @@
+import { findByDisplayValue } from "@testing-library/react";
 import React, { useState, useEffect } from "react";
 
 function CardDisplay() {
@@ -6,6 +7,7 @@ function CardDisplay() {
     const [savedCards, setSavedCards] = useState([]);
     const [level, setLevel] = useState(1);
     const [score, setScore] = useState(0);
+    const [re, setRe] = useState(0);
     const displays = [];
     const difficulty = 1;
     const startingCards = 2;
@@ -27,10 +29,23 @@ function CardDisplay() {
       
         return result;
     }
+    function restartGame() {
+        //setImg([])
+        //setScore(0)
+        //setLevel(1)
+        //setRe(1);
+        //setSavedCards([]);
+        
+    }
     function checkIfCardInMemory(id) {
         if(savedCards.includes(id)) {
-            emptyDiv(imageContainer);
+            //emptyDiv(imageContainer);
             imageContainer.textContent = "Game Over";
+
+            const tryAgainBtn = document.createElement("button");
+            tryAgainBtn.textContent = "Try again";
+            imageContainer.appendChild(tryAgainBtn)
+            tryAgainBtn.addEventListener("click", restartGame);
             return true;
         }
         else {
@@ -41,7 +56,7 @@ function CardDisplay() {
     function emptyDiv(targetDiv) {
         if(targetDiv != null) {
             while (targetDiv.firstChild) {
-                targetDiv.removeChild(targetDiv.firstChild);
+                //targetDiv.removeChild(targetDiv.firstChild);
             }
         }
         
@@ -51,6 +66,7 @@ function CardDisplay() {
         if(savedCards.length >= level * difficulty + startingCards) {
             setSavedCards([]);
             setLevel(level + 1)
+            setImg([])
         }
     }
     function shuffle(id) {
@@ -92,7 +108,7 @@ function CardDisplay() {
           const pokeData = await response.json();
           const urlArray = [];
           const randArray = randomUniqueNum(pokeData.results.length, level * difficulty + startingCards)
-          
+          if(re == 1) setRe(0)
           emptyDiv(imageContainer)
           for (let i = 0; i < randArray.length; i ++) {
             const newUrl = pokeData.results[randArray[i]-1].url;
@@ -109,6 +125,7 @@ function CardDisplay() {
     return (
         <div> 
         {checkLevelUp()}
+        {console.log(images)}
             <div id="score-board">
                 <div id="level">
                     Level: {level}
